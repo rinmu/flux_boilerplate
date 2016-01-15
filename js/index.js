@@ -1,8 +1,8 @@
 import React from 'react'
 import {render} from 'react-dom'
-import ExampleApp from './components/ExampleApp'
+import TodoApp from './components/TodoApp'
 
 render(
-  <ExampleApp />,
+  <TodoApp />,
   document.getElementById('root')
 )
