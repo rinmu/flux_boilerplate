@@ -10,7 +10,7 @@ $ cd flux_boilerplate
 
 $ npm install
 
-$ gulp
+$ node ./node_modules/gulp/bin/gulp.js
 ```
 
 
