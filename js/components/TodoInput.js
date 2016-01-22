@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react'
+import {createTodo} from '../actions/TodoActions'
 
 class TodoInput extends Component{
   handleSubmit(e){
     e.preventDefault();
 
     const body = this.refs.body.value.trim();
-
-    this.props.handleCreate(body);
+    createTodo(body)
   }
 
   render(){

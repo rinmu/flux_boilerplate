@@ -1,14 +1,31 @@
 import React, { Component, PropTypes } from 'react'
 import shortid from 'shortid'
+import TodoStore from '../stores/TodoStore'
 import TodoInput from './TodoInput'
 import TodoListItem from './TodoListItem'
+
+function getTodoState(){
+  return {
+    todos: TodoStore.getTodos()
+  }
+}
 
 class TodoApp extends Component{
   constructor(props){
     super(props)
-    this.state = {
-      todos: []
-    }
+    this.state = getTodoState();
+  }
+
+  componentDidMount(){
+    TodoStore.addChangeListener(this._onChange.bind(this))
+  }
+
+  componentWillUnMount(){
+    TodoStore.removeChangeListener(this._onChange)
+  }
+
+  _onChange(){
+    this.setState(getTodoState());
   }
 
   handleSubmit(body){
