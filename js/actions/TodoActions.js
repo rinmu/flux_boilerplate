@@ -17,6 +17,6 @@ export function createTodo(body){
 export function deleteTodo(id){
   AppDispatcher.dispatch({
     actionType: DELETE_TODO,
-    id
+    id: id
   });
 }

@@ -11,12 +11,11 @@ function appendTodo(todo){
 }
 
 function deleteTodo(id){
-  _todos.filter(
+  _todos = _todos.filter(
     (todo)=>{
       return todo.id !== id
     }
   )
-  
 }
 
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
@@ -39,9 +38,15 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
 
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
+  console.log(action.actionType);
   switch(action.actionType) {
     case CREATE_TODO:
       appendTodo(action.todo);
+      TodoStore.emitChange();
+      break;
+
+    case DELETE_TODO:
+      deleteTodo(action.id);
       TodoStore.emitChange();
       break;
 
