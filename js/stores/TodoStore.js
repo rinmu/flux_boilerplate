@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import { EventEmitter } from 'events'
-import { CREATE_TODO, DELETE_TODO } from '../actions/TodoActions'
+import { CREATE_TODO, DELETE_TODO, COMPLETE_TODO } from '../actions/TodoActions'
 
 const CHANGE_EVENT = 'change'
 
@@ -14,6 +14,17 @@ function deleteTodo(id){
   _todos = _todos.filter(
     (todo)=>{
       return todo.id !== id
+    }
+  )
+}
+
+function completeTodo(id){
+  _todos = _todos.map(
+    (todo)=>{
+      if(todo.id == id){
+        todo.completed = true;
+      }
+      return todo
     }
   )
 }
@@ -47,6 +58,11 @@ AppDispatcher.register(function(action) {
 
     case DELETE_TODO:
       deleteTodo(action.id);
+      TodoStore.emitChange();
+      break;
+
+    case COMPLETE_TODO:
+      completeTodo(action.id);
       TodoStore.emitChange();
       break;
 
