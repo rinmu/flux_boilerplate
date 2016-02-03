@@ -31,7 +31,15 @@ function completeTodo(id){
 
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
   getTodos(){
-    return _todos;
+    return _todos.filter(function(todo){
+      return !todo.completed
+    })
+  },
+
+  getCompletedTodos(){
+    return _todos.filter(function(todo){
+      return todo.completed
+    })
   },
 
   emitChange() {

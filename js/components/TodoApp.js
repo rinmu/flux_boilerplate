@@ -3,10 +3,13 @@ import shortid from 'shortid'
 import TodoStore from '../stores/TodoStore'
 import TodoInput from './TodoInput'
 import TodoListItem from './TodoListItem'
+import ActiveTodos from './ActiveTodos'
+import CompletedTodos from './CompletedTodos'
 
 function getTodoState(){
   return {
-    todos: TodoStore.getTodos()
+    todos: TodoStore.getTodos(),
+    completedTodos: TodoStore.getCompletedTodos()
   }
 }
 
@@ -50,20 +53,9 @@ class TodoApp extends Component{
   render(){
     return(
       <div>
-        <h1>TODO</h1>
         <TodoInput handleCreate={this.handleSubmit.bind(this)} />
-
-        <div>
-           <ul>
-             {this.state.todos.map(
-               (todo)=>{
-                 return(
-                   <TodoListItem todo={todo} key={todo.id} handleDelete={this.handleDelete.bind(this)}/>
-                 );
-               }
-             )}
-           </ul>
-        </div>
+        <ActiveTodos todos={this.state.todos} />
+        <CompletedTodos todos={this.state.completedTodos} />
       </div>
     )
   }
