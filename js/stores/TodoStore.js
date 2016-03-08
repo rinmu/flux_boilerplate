@@ -1,10 +1,11 @@
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import { EventEmitter } from 'events'
-import { CREATE_TODO, DELETE_TODO, COMPLETE_TODO } from '../actions/TodoActions'
+import { CREATE_TODO, DELETE_TODO, COMPLETE_TODO, FETCH_TODOS, RECEIVE_TODOS } from '../actions/TodoActions'
 
 const CHANGE_EVENT = 'change'
 
 let _todos = [];
+let _isFetching = false;
 
 function appendTodo(todo){
   _todos = [todo, ..._todos]
@@ -29,7 +30,22 @@ function completeTodo(id){
   )
 }
 
+function fetchTodos(){
+  _isFetching = true;
+}
+
+function receiveTodos(todos){
+  _todos = todos;
+  _isFetching = false;
+}
+
+
+
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
+  isFetching(){
+    return _isFetching;
+  },
+
   getTodos(){
     return _todos.filter(function(todo){
       return !todo.completed
@@ -59,6 +75,16 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   console.log(action.actionType);
   switch(action.actionType) {
+    case FETCH_TODOS:
+      fetchTodos();
+      TodoStore.emitChange();
+      break;
+
+    case RECEIVE_TODOS:
+      receiveTodos(action.todos);
+      TodoStore.emitChange();
+      break;
+
     case CREATE_TODO:
       appendTodo(action.todo);
       TodoStore.emitChange();

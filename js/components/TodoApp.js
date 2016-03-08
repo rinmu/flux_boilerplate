@@ -5,9 +5,11 @@ import TodoInput from './TodoInput'
 import TodoListItem from './TodoListItem'
 import ActiveTodos from './ActiveTodos'
 import CompletedTodos from './CompletedTodos'
+import { fetchTodos } from '../actions/TodoActions'
 
 function getTodoState(){
   return {
+    isFetching: TodoStore.isFetching(),
     todos: TodoStore.getTodos(),
     completedTodos: TodoStore.getCompletedTodos()
   }
@@ -21,6 +23,7 @@ class TodoApp extends Component{
 
   componentDidMount(){
     TodoStore.addChangeListener(this._onChange.bind(this))
+    fetchTodos();
   }
 
   componentWillUnMount(){
@@ -51,11 +54,20 @@ class TodoApp extends Component{
   }
 
   render(){
-    return(
-      <div>
+    var content = '';
+    if(this.state.isFetching){
+      content = <h1>Loading...</h1>
+    }else{
+      content = (<div>
         <TodoInput handleCreate={this.handleSubmit.bind(this)} />
         <ActiveTodos todos={this.state.todos} />
         <CompletedTodos todos={this.state.completedTodos} />
+      </div>)
+    }
+
+    return(
+      <div>
+        { content }
       </div>
     )
   }
